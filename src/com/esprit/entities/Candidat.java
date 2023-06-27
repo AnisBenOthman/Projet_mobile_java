@@ -20,6 +20,14 @@ public class Candidat extends User {
     public Candidat() {
         super();
     }
+
+    public Candidat(Diplome education, Experience experience, String nom, String prenom, String mail, Integer numero_telephone, String motdepasse) {
+        super(nom, prenom, mail, numero_telephone, motdepasse);
+        this.education = education;
+        this.experience = experience;
+    }
+    
+    
     
     
 
@@ -30,7 +38,7 @@ public class Candidat extends User {
         this.Github= Github;
         this.experience=experience;
         if (!emailvalidator(mail)) {
-            throw new MailException("Mail non");
+            throw new MailException("Mail non valide");
         }
 
         if (numero_telephone.toString().length() != 8) {

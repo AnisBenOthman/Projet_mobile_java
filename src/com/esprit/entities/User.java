@@ -55,6 +55,16 @@ public class User {
     return pattern.match(mail);
 }
 
+    public User(String nom, String prenom, String mail, Integer numero_telephone, String motdepasse) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.mail = mail;
+        this.numero_telephone = numero_telephone;
+        this.motdepasse = motdepasse;
+    }
+   
+   
+
    
 
 

@@ -63,7 +63,7 @@ public class MotdepasseOublier extends Form{
             } 
             else {
                 
-                  Dialog.show("Alerte", "login invalide", null);
+                  Dialog.show("Alerte", "Nous n'avons trouvé aucun compte associé à " + tf.getText() + "Veuillez essayer avec une adresse e-mail ou un numéro de téléphone alternatif", "OK",null);
             }
          });
     }

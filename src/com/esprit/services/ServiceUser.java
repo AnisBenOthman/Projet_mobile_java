@@ -52,10 +52,10 @@ public class ServiceUser {
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            request.addArgument("description", t.getDescription());
+            //request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("education", ((Candidat) t).getEducation().name());
-            request.addArgument("Github", ((Candidat) t).getGithub());
+            //request.addArgument("Github", ((Candidat) t).getGithub());
             request.addArgument("experience", ((Candidat) t).getExperience().name());
 
 //                List<Candidat> list = afficherCandidat();
@@ -82,13 +82,12 @@ public class ServiceUser {
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            request.addArgument("description", t.getDescription());
+            //request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("NomEntreprise", ((Entreprise) t).getNomEntreprise());
             request.addArgument("TailleEntreprise", ((Entreprise) t).getTailleEntreprise().name());
-            request.addArgument("experience", ((Candidat) t).getExperience().name());
-            request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
-            request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
+            //request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
+            //request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
             request.addArgument("id_domaine", String.valueOf(((Entreprise) t).getId_domaine()));
 
 //                List<Entreprisedomaine> list = afficherentreprise();
@@ -125,10 +124,10 @@ public class ServiceUser {
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            request.addArgument("description", t.getDescription());
+            //request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("education", ((Candidat) t).getEducation().name());
-            request.addArgument("Github", ((Candidat) t).getGithub());
+            //request.addArgument("Github", ((Candidat) t).getGithub());
             request.addArgument("experience", ((Candidat) t).getExperience().name());
 
             request.addResponseListener((evt) -> {
@@ -160,13 +159,13 @@ public class ServiceUser {
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            request.addArgument("description", t.getDescription());
+            //request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("NomEntreprise", ((Entreprise) t).getNomEntreprise());
             request.addArgument("TailleEntreprise", ((Entreprise) t).getTailleEntreprise().name());
-            request.addArgument("experience", ((Candidat) t).getExperience().name());
-            request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
-            request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
+            
+            //request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
+           // request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
             request.addArgument("id_domaine", String.valueOf(((Entreprise) t).getId_domaine()));
 
             request.addResponseListener((evt) -> {
@@ -386,17 +385,13 @@ public class ServiceUser {
     }
 
     public boolean login(String login, String password) {
-        //String url = URI + "?mail=" + login + "&password=" + password;
-//        String url;
-//        if (login.contains("@")) {
-//            url = URI + "?mail=" + login + "&password=" + password;
-//        } else {
-//            url = URI + "?numero_telephone=" + login + "&password=" + password;
-//        }
+
         ConnectionRequest request = new ConnectionRequest();
         request.setUrl(URI + "signin");
         request.setHttpMethod("POST");
-        request.addArgument("login", login );
+        
+        request.addArgument("mail", login );
+        request.addArgument("numero_telephone", login );
         request.addArgument("motdepasse", password );
         request.addResponseListener((evt) -> {
             try {
@@ -416,17 +411,13 @@ public class ServiceUser {
     }
 
     public boolean loginpasse(String login) {
-//        String url;
-//        if (login.contains("@")) {
-//            url = URI + "?mail=" + login;
-//        } else {
-//            url = URI + "?numero_telephone=" + login;
-//        }
+
         ConnectionRequest request = new ConnectionRequest();
         request.setUrl(URI + "verify-login");
         request.setHttpMethod("POST");
         
-        request.addArgument("login", login);
+        request.addArgument("mail", login);
+        request.addArgument("numero_telephone", login);
 
         request.addResponseListener((evt) -> {
             try {
@@ -541,12 +532,6 @@ public class ServiceUser {
 
     public String idutilisateur(String login) {
         ConnectionRequest request = new ConnectionRequest();
-//        String url;
-//        if (login.contains("@")) {
-//            url = URI + "?mail=" + login;
-//        } else {
-//            url = URI + "?numero_telephone=" + login;
-//        }
         request.setUrl(URI + login);
         request.setHttpMethod("GET");
 
@@ -579,6 +564,28 @@ public class ServiceUser {
         } else {
             return "not found";
         }
+    }
+    
+    public boolean modifiermotdepasse(String motdepasse, String login) {
+        
+        
+        ConnectionRequest request = new ConnectionRequest();
+
+            request.setUrl(URI + "reset-pwd");
+            request.setHttpMethod("PUT");
+
+            request.addArgument("motdepasse", motdepasse);
+            request.addArgument("numero_telephone", login);
+            request.addArgument("mail", login);
+            
+            
+
+            request.addResponseListener((evt) -> {
+                responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+            });
+            NetworkManager.getInstance().addToQueueAndWait(request);
+
+            return responseResult;
     }
 
 }
