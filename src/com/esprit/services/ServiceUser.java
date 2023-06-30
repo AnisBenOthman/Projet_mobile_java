@@ -316,7 +316,7 @@ public class ServiceUser {
     public List<String> afficherDomainebynom() {
         ConnectionRequest request = new ConnectionRequest();
 
-        request.setUrl(URI);
+        request.setUrl(URI + "domaine");
         request.setHttpMethod("GET");
 
         request.addResponseListener((evt) -> {
