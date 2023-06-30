@@ -21,6 +21,7 @@ import com.esprit.services.ServiceUser;
 public class MotdepasseOublier extends Form{
     
     private Button btnrinitialiser;
+    private Button btnretour;
     private TextField tf;
     public MotdepasseOublier() {
         super("mot de passe oublié", BoxLayout.y());
@@ -32,7 +33,8 @@ public class MotdepasseOublier extends Form{
         Label lb1 = new Label("Réinitialisez le mot de passe en deux étapes :");
         tf = new TextField(null,"email ou téléphone");
         btnrinitialiser = new Button("Réinitialiser");
-        addAll(lb,lb1,tf,btnrinitialiser);
+        btnretour = new Button("Retour");
+        addAll(lb,lb1,tf,btnrinitialiser,btnretour);
     }
     
     public void AddAction(){
@@ -65,6 +67,9 @@ public class MotdepasseOublier extends Form{
                 
                   Dialog.show("Alerte", "Nous n'avons trouvé aucun compte associé à " + tf.getText() + "Veuillez essayer avec une adresse e-mail ou un numéro de téléphone alternatif", "OK",null);
             }
+         });
+         btnretour.addActionListener((l) -> {
+             new Home().showBack();
          });
     }
     

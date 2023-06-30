@@ -21,7 +21,7 @@ import com.esprit.services.ServiceUser;
  *
  * @author Anis
  */
-public class AjoutCandidat extends Form {
+public class AjoutCandidat extends Menubar {
 
     private Button btn;
     private TextField nom;
@@ -73,7 +73,9 @@ public class AjoutCandidat extends Form {
                 System.err.println(ex.getMessage());
             }
             Dialog.show("Confirmation d'ajout", "Inscription reussie", "OK", null);
+            new Home().showBack();
         });
+        
 
     }
 

@@ -15,7 +15,7 @@ import com.esprit.entities.Taille;
  *
  * @author Anis
  */
-public class AjoutEntreprise extends Form{
+public class AjoutEntreprise extends Menubar{
     
     private Button bnt;
     private TextField NomEntreprise;

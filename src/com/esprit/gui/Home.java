@@ -17,7 +17,7 @@ import javafx.scene.control.Alert;
  *
  * @author Anis
  */
-public class Home extends Form {
+public class Home extends Menubar {
 
     private Button btnidentifier;
     private Button btnmpoublier;

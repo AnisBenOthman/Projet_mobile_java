@@ -16,7 +16,7 @@ import com.esprit.services.ServiceUser;
  *
  * @author Anis
  */
-public class Inscription extends Form {
+public class Inscription extends Menubar {
 
     private Button btnentreprise;
     private Button btncandidat;
