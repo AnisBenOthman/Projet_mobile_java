@@ -10,18 +10,18 @@ import com.codename1.ui.Dialog;
 import com.codename1.ui.Form;
 import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.GridLayout;
 import com.esprit.entities.Candidat;
 import com.esprit.entities.Diplome;
 import com.esprit.entities.Experience;
 import com.esprit.entities.MailException;
 import com.esprit.services.ServiceUser;
 
-
 /**
  *
  * @author Anis
  */
-public class AjoutCandidat extends Form{
+public class AjoutCandidat extends Form {
 
     private Button btn;
     private TextField nom;
@@ -32,13 +32,14 @@ public class AjoutCandidat extends Form{
     private TextField motdepasse2;
     private ComboBox<Diplome> diplome;
     private ComboBox<Experience> experience;
+
     public AjoutCandidat() {
         super("Inscription Candidat", BoxLayout.y());
         OnGui();
         AddAction();
     }
-    
-    public void OnGui(){
+
+    public void OnGui() {
         nom = new TextField(null, "Nom");
         prenom = new TextField(null, "Prénom");
         mail = new TextField(null, "Mail");
@@ -56,13 +57,14 @@ public class AjoutCandidat extends Form{
         experience.addItem(Experience.Confirme);
         experience.addItem(Experience.Senior);
         btn = new Button("Ajouter");
-        
-        addAll(nom,prenom,telephone,mail,diplome,experience,motdepasse,motdepasse2,btn);
-        
-        
+        setLayout(new BoxLayout(BoxLayout.Y_AXIS));
+        addAll(nom, prenom, telephone, mail, diplome, experience, motdepasse, motdepasse2, btn);
+        GridLayout layout = new GridLayout(1, 1);
+        setLayout(layout);
+
     }
-    
-    public void AddAction(){
+
+    public void AddAction() {
         ServiceUser su = new ServiceUser();
         btn.addActionListener((l) -> {
             try {
@@ -70,12 +72,9 @@ public class AjoutCandidat extends Form{
             } catch (MailException ex) {
                 System.err.println(ex.getMessage());
             }
-            Dialog.show("Confirmation d'ajout", "Inscription reussie");
+            Dialog.show("Confirmation d'ajout", "Inscription reussie", "OK", null);
         });
-        
-        
+
     }
-    
-    
-    
+
 }
