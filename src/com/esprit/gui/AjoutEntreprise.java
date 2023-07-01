@@ -55,6 +55,7 @@ public class AjoutEntreprise extends Menubar{
     
     public void AddAction(){
         
+        
     }
     
     

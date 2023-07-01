@@ -15,7 +15,10 @@ import com.esprit.entities.Candidat;
 import com.esprit.entities.Diplome;
 import com.esprit.entities.Experience;
 import com.esprit.entities.MailException;
+import com.esprit.entities.User;
 import com.esprit.services.ServiceUser;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -33,7 +36,7 @@ public class AjoutCandidat extends Menubar {
     private ComboBox<Diplome> diplome;
     private ComboBox<Experience> experience;
 
-    public AjoutCandidat() {
+    public AjoutCandidat() throws MailException {
         super("Inscription Candidat", BoxLayout.y());
         OnGui();
         AddAction();
@@ -64,18 +67,48 @@ public class AjoutCandidat extends Menubar {
 
     }
 
-    public void AddAction() {
-        ServiceUser su = new ServiceUser();
+    public void AddAction() throws MailException {
+
         btn.addActionListener((l) -> {
             try {
-                su.ajouter(new Candidat(diplome.getSelectedItem(), experience.getSelectedItem(), nom.getText(), prenom.getText(), mail.getText(), Integer.parseInt(telephone.getText()), motdepasse.getText()));
+                if (nom.getText().isEmpty() || prenom.getText().isEmpty() || mail.getText().isEmpty() || telephone.getText().isEmpty() || motdepasse.getText().isEmpty() || experience.getSelectedItem() == null || diplome.getSelectedItem() == null) {
+                    Dialog.show("Champs vide", "Champs obligatoire à remplir!", "OK", null);
+                    return;
+                }
+                ServiceUser su = new ServiceUser();
+                List<Candidat> list = su.afficherCandidat();
+
+                Boolean candidatexiste = false;
+                for (Candidat u : list) {
+                    if (u.getMail().equals(mail.getText()) || u.getNumero_telephone() == Integer.parseInt(telephone.getText())) {
+                        candidatexiste = true;
+                        break;
+                    }
+
+                }
+                if (candidatexiste == true) {
+                    Dialog.show("Alerte", "Candidat existe déja!", "OK", null);
+                    return;
+                } else if (telephone.getText().length() < 8) {
+                    Dialog.show("Alerte", "numero téléphone invalide", "OK", null);
+                    return;
+                } else if (motdepasse.getText().length() < 8) {
+                    Dialog.show("Alerte", "mot de passe invalide, il doit contenir au moins 8 caractéres", "OK", null);
+                    return;
+                } else if (!motdepasse.getText().equals(motdepasse2.getText())) {
+                    Dialog.show("Alerte", "Mot de passe non conforme!", "OK", null);
+                    return;
+                } else {
+                    su.ajouter(new Candidat(diplome.getSelectedItem(), experience.getSelectedItem(), nom.getText(), prenom.getText(), mail.getText(), Integer.parseInt(telephone.getText()), motdepasse.getText()));
+                    Dialog.show("Confirmation d'ajout", "Inscription reussie", "OK", null);
+                    new Home().showBack();
+                }
             } catch (MailException ex) {
                 System.err.println(ex.getMessage());
             }
-            Dialog.show("Confirmation d'ajout", "Inscription reussie", "OK", null);
-            new Home().showBack();
-        });
-        
+
+        }
+        );
 
     }
 

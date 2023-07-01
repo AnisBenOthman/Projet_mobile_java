@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 
+
 /**
  *
  * @author Anis
@@ -27,6 +28,7 @@ public class ServiceUser {
 
     private boolean responseResult;
     private List<User> user;
+    private List<Candidat> cd;
     private List<Entreprisedomaine> entreprise;
     private List<String> list;
     boolean loginSuccess = false;
@@ -36,6 +38,7 @@ public class ServiceUser {
 
     public ServiceUser() {
         user = new ArrayList<>();
+        cd = new ArrayList<>();
         entreprise = new ArrayList<>();
         list = new ArrayList<>();
     }
@@ -51,6 +54,7 @@ public class ServiceUser {
             request.addArgument("nom", t.getNom());
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
+            request.addArgument("motdepasse", String.valueOf(User.Codepasse(t.getMotdepasse())));
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
             //request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
@@ -82,6 +86,7 @@ public class ServiceUser {
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
+            request.addArgument("motdepasse", String.valueOf(User.Codepasse(t.getMotdepasse())));
             //request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("NomEntreprise", ((Entreprise) t).getNomEntreprise());
@@ -163,9 +168,9 @@ public class ServiceUser {
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("NomEntreprise", ((Entreprise) t).getNomEntreprise());
             request.addArgument("TailleEntreprise", ((Entreprise) t).getTailleEntreprise().name());
-            
+
             //request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
-           // request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
+            // request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
             request.addArgument("id_domaine", String.valueOf(((Entreprise) t).getId_domaine()));
 
             request.addResponseListener((evt) -> {
@@ -340,10 +345,10 @@ public class ServiceUser {
         return list;
     }
 
-    public List<User> afficherCandidat() throws MailException {
+    public List<Candidat> afficherCandidat() throws MailException {
         ConnectionRequest request = new ConnectionRequest();
 
-        request.setUrl(URI);
+        request.setUrl(URI + "candidat");
         request.setHttpMethod("GET");
 
         request.addResponseListener((evt) -> {
@@ -351,37 +356,35 @@ public class ServiceUser {
                 InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
                 Map<String, Object> result = new JSONParser().parseJSON(jsonText);
                 List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
-                user.clear();
-
+                cd.clear();
+                
                 for (Map<String, Object> obj : list) {
                     int id = (int) Float.parseFloat(obj.get("id").toString());
                     String nom = obj.get("nom").toString();
                     String prenom = obj.get("prenom").toString();
                     String mail = obj.get("mail").toString();
                     int numero_telephone = (int) Float.parseFloat(obj.get("numero_telephone").toString());
-                    String description = obj.get("description").toString();
+//                  
+                    String motdepasse = obj.get("motdepasse").toString();
 
                     Experience experience = Experience.valueOf(obj.get("experience").toString());
-                    String Github = obj.get("Github").toString();
+                    
                     Diplome education = Diplome.valueOf(obj.get("education").toString());
 
-                    String role = obj.get("role").toString();
-                    if (role.equals("Candidat")) {
-                        User candidat = new Candidat(id, nom, prenom, mail, numero_telephone, "", description, education, Github, experience);
+                    Candidat candidat = new Candidat(nom, prenom, mail, numero_telephone, motdepasse, "", education, "", experience);
+                       
 
-                        user.add(candidat);
-                    }
-
+                    cd.add(candidat);
                 }
-            } catch (MailException ex) {
-                System.out.println(ex.getMessage());
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
+            } catch (MailException ex) {
+                
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
 
-        return user;
+        return cd;
     }
 
     public boolean login(String login, String password) {
@@ -389,10 +392,10 @@ public class ServiceUser {
         ConnectionRequest request = new ConnectionRequest();
         request.setUrl(URI + "signin");
         request.setHttpMethod("POST");
-        
-        request.addArgument("mail", login );
-        request.addArgument("numero_telephone", login );
-        request.addArgument("motdepasse", password );
+
+        request.addArgument("mail", login);
+        request.addArgument("numero_telephone", login);
+        request.addArgument("motdepasse", password);
         request.addResponseListener((evt) -> {
             try {
                 InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
@@ -415,7 +418,7 @@ public class ServiceUser {
         ConnectionRequest request = new ConnectionRequest();
         request.setUrl(URI + "verify-login");
         request.setHttpMethod("POST");
-        
+
         request.addArgument("mail", login);
         request.addArgument("numero_telephone", login);
 
@@ -565,27 +568,24 @@ public class ServiceUser {
             return "not found";
         }
     }
-    
+
     public boolean modifiermotdepasse(String motdepasse, String login) {
-        
-        
+
         ConnectionRequest request = new ConnectionRequest();
 
-            request.setUrl(URI + "reset-pwd");
-            request.setHttpMethod("PUT");
+        request.setUrl(URI + "reset-pwd");
+        request.setHttpMethod("PUT");
 
-            request.addArgument("motdepasse", motdepasse);
-            request.addArgument("numero_telephone", login);
-            request.addArgument("mail", login);
-            
-            
+        request.addArgument("motdepasse", motdepasse);
+        request.addArgument("numero_telephone", login);
+        request.addArgument("mail", login);
 
-            request.addResponseListener((evt) -> {
-                responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
-            });
-            NetworkManager.getInstance().addToQueueAndWait(request);
+        request.addResponseListener((evt) -> {
+            responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
 
-            return responseResult;
+        return responseResult;
     }
 
 }

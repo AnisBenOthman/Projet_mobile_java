@@ -10,7 +10,9 @@ import com.codename1.ui.Dialog;
 import com.codename1.ui.Form;
 import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.BoxLayout;
+import com.esprit.entities.MailException;
 import com.esprit.services.ServiceUser;
+
 
 /**
  *
@@ -36,7 +38,14 @@ public class Inscription extends Menubar {
       public void AddAction() {
         btncandidat.addActionListener((l) -> {
             
-            new AjoutCandidat().show();
+            try {
+               
+                new AjoutCandidat().show();
+                
+            } catch (MailException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
            
       
 
