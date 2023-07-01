@@ -99,7 +99,7 @@ public class AjoutCandidat extends Menubar {
                     Dialog.show("Alerte", "Mot de passe non conforme!", "OK", null);
                     return;
                 } else {
-                    su.ajouter(new Candidat(diplome.getSelectedItem(), experience.getSelectedItem(), nom.getText(), prenom.getText(), mail.getText(), Integer.parseInt(telephone.getText()), motdepasse.getText()));
+                    su.ajouter(new Candidat(nom.getText(), prenom.getText(), mail.getText(), Integer.parseInt(telephone.getText()), motdepasse.getText(), "description facultatif", diplome.getSelectedItem(), "Github", experience.getSelectedItem()));
                     Dialog.show("Confirmation d'ajout", "Inscription reussie", "OK", null);
                     new Home().showBack();
                 }
