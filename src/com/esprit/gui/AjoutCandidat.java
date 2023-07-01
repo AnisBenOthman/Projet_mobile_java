@@ -27,6 +27,7 @@ import java.util.List;
 public class AjoutCandidat extends Menubar {
 
     private Button btn;
+    private Button retour;
     private TextField nom;
     private TextField prenom;
     private TextField mail;
@@ -60,8 +61,9 @@ public class AjoutCandidat extends Menubar {
         experience.addItem(Experience.Confirme);
         experience.addItem(Experience.Senior);
         btn = new Button("Ajouter");
+        retour = new Button("Retour");
         setLayout(new BoxLayout(BoxLayout.Y_AXIS));
-        addAll(nom, prenom, telephone, mail, diplome, experience, motdepasse, motdepasse2, btn);
+        addAll(nom, prenom, telephone, mail, diplome, experience, motdepasse, motdepasse2, btn,retour);
         GridLayout layout = new GridLayout(1, 1);
         setLayout(layout);
 
@@ -113,7 +115,10 @@ public class AjoutCandidat extends Menubar {
 
         }
         );
-
+    
+        retour.addActionListener((l) -> {  
+            new Inscription().showBack();
+        });
     }
 
 }

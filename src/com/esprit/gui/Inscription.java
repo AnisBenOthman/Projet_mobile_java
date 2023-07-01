@@ -42,6 +42,7 @@ public class Inscription extends Menubar {
                
                 new AjoutCandidat().show();
                 
+                
             } catch (MailException ex) {
                 System.out.println(ex.getMessage());
             }

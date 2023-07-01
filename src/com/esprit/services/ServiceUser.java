@@ -19,7 +19,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 
-
 /**
  *
  * @author Anis
@@ -32,6 +31,7 @@ public class ServiceUser {
     private List<Entreprisedomaine> entreprise;
     private List<String> list;
     boolean loginSuccess = false;
+    int id_domaine;
     //private List<Domaine> domaine;
 
     private final String URI = Statics.BASE_URL + "/user/";
@@ -294,6 +294,7 @@ public class ServiceUser {
                     int numero_telephone = (int) Float.parseFloat(obj.get("numero_telephone").toString());
                     String description = obj.get("description").toString();
                     String NomEntreprise = obj.get("NomEntreprise").toString();
+                    String motdepasse = obj.get("motdepasse").toString();
                     String Linkedin = obj.get("Linkedin").toString();
                     String SiteWeb = obj.get("SiteWeb").toString();
                     Taille TailleEntreprise = Taille.valueOf(obj.get("TailleEntreprise").toString());
@@ -301,7 +302,7 @@ public class ServiceUser {
 
                     int id_domaine = (int) Float.parseFloat(obj.get("id_domaine").toString());
 
-                    Entreprisedomaine ent = new Entreprisedomaine(id, nom, prenom, mail, numero_telephone, "", description, NomEntreprise, TailleEntreprise, SiteWeb, Linkedin, id_domaine, nom_domaine);
+                    Entreprisedomaine ent = new Entreprisedomaine(id, nom, prenom, mail, numero_telephone, motdepasse, description, NomEntreprise, TailleEntreprise, SiteWeb, Linkedin, id_domaine, nom_domaine);
                     this.entreprise.add(ent);
 
                 }
@@ -309,12 +310,13 @@ public class ServiceUser {
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             } catch (MailException ex) {
-                System.out.println(ex.getMessage());
-            }
+                
+            } 
+               
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
 
-        return entreprise;
+        return this.entreprise;
 
     }
 
@@ -357,7 +359,7 @@ public class ServiceUser {
                 Map<String, Object> result = new JSONParser().parseJSON(jsonText);
                 List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
                 cd.clear();
-                
+
                 for (Map<String, Object> obj : list) {
                     int id = (int) Float.parseFloat(obj.get("id").toString());
                     String nom = obj.get("nom").toString();
@@ -368,18 +370,17 @@ public class ServiceUser {
                     String motdepasse = obj.get("motdepasse").toString();
 
                     Experience experience = Experience.valueOf(obj.get("experience").toString());
-                    
+
                     Diplome education = Diplome.valueOf(obj.get("education").toString());
 
                     Candidat candidat = new Candidat(nom, prenom, mail, numero_telephone, motdepasse, "", education, "", experience);
-                       
 
                     cd.add(candidat);
                 }
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             } catch (MailException ex) {
-                
+
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
@@ -586,6 +587,33 @@ public class ServiceUser {
         NetworkManager.getInstance().addToQueueAndWait(request);
 
         return responseResult;
+    }
+
+    public int getIdDomaineByName(String name) {
+
+        ConnectionRequest request = new ConnectionRequest();
+
+        request.setUrl(URI + "domain/" + name);
+        request.setHttpMethod("GET");
+
+        request.addResponseListener((evt) -> {
+            try {
+                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
+                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
+
+                for (Map<String, Object> obj : list) {
+                    id_domaine = (int) Float.parseFloat(obj.get("id_domaine").toString());
+
+                }
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return id_domaine;
     }
 
 }
