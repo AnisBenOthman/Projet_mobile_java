@@ -98,7 +98,11 @@ public class AjoutCandidat extends Menubar {
                 } else if (!motdepasse.getText().equals(motdepasse2.getText())) {
                     Dialog.show("Alerte", "Mot de passe non conforme!", "OK", null);
                     return;
-                } else {
+                }else if(!User.emailvalidator(mail.getText())){
+                    Dialog.show("Alerte", "Adresse mail invalide!", "OK", null);
+                    return; 
+                }
+                else {
                     su.ajouter(new Candidat(nom.getText(), prenom.getText(), mail.getText(), Integer.parseInt(telephone.getText()), motdepasse.getText(), "description facultatif", diplome.getSelectedItem(), "Github", experience.getSelectedItem()));
                     Dialog.show("Confirmation d'ajout", "Inscription reussie", "OK", null);
                     new Home().showBack();
