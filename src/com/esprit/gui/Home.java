@@ -4,13 +4,19 @@
  */
 package com.esprit.gui;
 
+import com.codename1.components.ImageViewer;
 import com.codename1.ui.Button;
 import com.codename1.ui.Dialog;
+import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Form;
+import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
+import com.codename1.ui.URLImage;
 import com.codename1.ui.layouts.BoxLayout;
+import com.esprit.entities.MailException;
 import com.esprit.services.ServiceUser;
+import java.io.IOException;
 import javafx.scene.control.Alert;
 
 /**
@@ -24,11 +30,14 @@ public class Home extends Menubar {
     private Button btninscription;
     private TextField tflogin;
     private TextField tfmp;
+    private String link = "http://localhost:8080/mobile/findjob.PNG";
+    private EncodedImage placeHolder;
 
     public Home() {
         super("login", BoxLayout.y());
         OnGui();
         AddAction();
+        
     }
 
     public void OnGui() {
@@ -37,7 +46,14 @@ public class Home extends Menubar {
         btnmpoublier = new Button("mot de passe oublié");
         tflogin = new TextField(null, "login");
         tfmp = new TextField(null, "Password", LEFT, TextField.PASSWORD);
-        this.addAll(tflogin, tfmp, btnidentifier, btnmpoublier, btninscription);
+        try {
+            placeHolder = EncodedImage.create("/findjob.png");
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        Image img = URLImage.createToStorage(placeHolder, link, link, URLImage.RESIZE_SCALE_TO_FILL).scaled(400, 400);
+        
+        this.addAll(new ImageViewer(img),tflogin, tfmp, btnidentifier, btnmpoublier, btninscription);
     }
 
     public void AddAction() {
@@ -49,10 +65,15 @@ public class Home extends Menubar {
             if (su.login(tflogin.getText(), tfmp.getText()))
             {
                 if (su.idutilisateur(tflogin.getText()).equals("Candidat")) {
-                    new AfficherCandidat().show();
+                    
+                        new Inscription().show();
+                    
                 } else if (su.idutilisateur(tflogin.getText()).equals("Entreprise")) {
-                    new AfficherEntreprise().show();
+                    new MotdepasseOublier().show();
                 }
+            }
+            else {
+                Dialog.show("Alerte", "Identifiant ou mot de passe non valide", "OK", null);
             }
 
         });

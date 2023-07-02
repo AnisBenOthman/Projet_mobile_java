@@ -18,6 +18,7 @@ import com.esprit.entities.MailException;
 import com.esprit.entities.User;
 import com.esprit.services.ServiceUser;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.List;
 
 /**
@@ -41,6 +42,10 @@ public class AjoutCandidat extends Menubar {
         super("Inscription Candidat", BoxLayout.y());
         OnGui();
         AddAction();
+        getToolbar().addCommandToLeftBar("Retour", null, (l) -> { 
+            new Inscription().showBack();
+            
+        });
     }
 
     public void OnGui() {
@@ -70,14 +75,14 @@ public class AjoutCandidat extends Menubar {
     }
 
     public void AddAction() throws MailException {
-
+    ServiceUser su = new ServiceUser();
         btn.addActionListener((l) -> {
             try {
                 if (nom.getText().isEmpty() || prenom.getText().isEmpty() || mail.getText().isEmpty() || telephone.getText().isEmpty() || motdepasse.getText().isEmpty() || experience.getSelectedItem() == null || diplome.getSelectedItem() == null) {
                     Dialog.show("Champs vide", "Champs obligatoire à remplir!", "OK", null);
                     return;
                 }
-                ServiceUser su = new ServiceUser();
+                
                 List<Candidat> list = su.afficherCandidat();
 
                 Boolean candidatexiste = false;
@@ -91,7 +96,7 @@ public class AjoutCandidat extends Menubar {
                 if (candidatexiste == true) {
                     Dialog.show("Alerte", "Candidat existe déja!", "OK", null);
                     return;
-                } else if (telephone.getText().length() < 8) {
+                } else if (telephone.getText().length() != 8) {
                     Dialog.show("Alerte", "numero téléphone invalide", "OK", null);
                     return;
                 } else if (motdepasse.getText().length() < 8) {
@@ -118,6 +123,8 @@ public class AjoutCandidat extends Menubar {
     
         retour.addActionListener((l) -> {  
             new Inscription().showBack();
+            System.out.println(su.login("contact@iplabel.com", "56526922"));
+            
         });
     }
 

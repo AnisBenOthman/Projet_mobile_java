@@ -18,7 +18,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-
 /**
  *
  * @author Anis
@@ -32,6 +31,7 @@ public class ServiceUser {
     private List<String> list;
     boolean loginSuccess = false;
     int id_domaine;
+    String role = "not found";
     //private List<Domaine> domaine;
 
     private final String URI = Statics.BASE_URL + "/user/";
@@ -56,23 +56,12 @@ public class ServiceUser {
             request.addArgument("mail", t.getMail());
             request.addArgument("motdepasse", String.valueOf(User.Codepasse(t.getMotdepasse())));
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            //request.addArgument("description", t.getDescription());
+            request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("education", ((Candidat) t).getEducation().name());
-            //request.addArgument("Github", ((Candidat) t).getGithub());
+            request.addArgument("Github", ((Candidat) t).getGithub());
             request.addArgument("experience", ((Candidat) t).getExperience().name());
 
-//                List<Candidat> list = afficherCandidat();
-//                Boolean candidatexiste = false;
-//                for (Candidat u : list) {
-//                    if (u.getMail().equals(t.getMail()) || u.getNumero_telephone() == t.getNumero_telephone()) {
-//                        candidatexiste = true;
-//                        break;
-//                    }
-//                }
-//                if (candidatexiste) {
-//                    throw new MailException("candidat existe deja");
-//                }
             request.addResponseListener((evt) -> {
                 responseResult = request.getResponseCode() == 201; // Code HTTP 201 OK
             });
@@ -87,25 +76,14 @@ public class ServiceUser {
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
             request.addArgument("motdepasse", String.valueOf(User.Codepasse(t.getMotdepasse())));
-            //request.addArgument("description", t.getDescription());
+            request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("NomEntreprise", ((Entreprise) t).getNomEntreprise());
             request.addArgument("TailleEntreprise", ((Entreprise) t).getTailleEntreprise().name());
-            //request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
-            //request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
+            request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
+            request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
             request.addArgument("id_domaine", String.valueOf(((Entreprise) t).getId_domaine()));
 
-//                List<Entreprisedomaine> list = afficherentreprise();
-//                Boolean entreprisetexiste = false;
-//                for (Entreprisedomaine u : list) {
-//                    if (u.getMail().equals(p.getMail()) || u.getNumero_telephone() == p.getNumero_telephone()) {
-//                        entreprisetexiste = true;
-//                        break;
-//                    }
-//                }
-//                if (entreprisetexiste) {
-//                    throw new MailException("Entreprise existe deja");
-//                }
             request.addResponseListener((evt) -> {
                 responseResult = request.getResponseCode() == 201; // Code HTTP 201 OK
             });
@@ -129,10 +107,10 @@ public class ServiceUser {
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            //request.addArgument("description", t.getDescription());
+            request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("education", ((Candidat) t).getEducation().name());
-            //request.addArgument("Github", ((Candidat) t).getGithub());
+            request.addArgument("Github", ((Candidat) t).getGithub());
             request.addArgument("experience", ((Candidat) t).getExperience().name());
 
             request.addResponseListener((evt) -> {
@@ -141,17 +119,6 @@ public class ServiceUser {
             NetworkManager.getInstance().addToQueueAndWait(request);
 
             return responseResult;
-//                List<Candidat> list = afficherCandidat();
-//                Boolean candidatexiste = false;
-//                for (Candidat u : list) {
-//                    if (u.getMail().equals(p.getMail()) || u.getNumero_telephone() == p.getNumero_telephone()) {
-//                        candidatexiste = true;
-//                        break;
-//                    }
-//                }
-//                if (candidatexiste) {
-//                    throw new MailException("candidat existe deja");
-//                }
 
         } else if (t instanceof Entreprise) {
 
@@ -164,13 +131,13 @@ public class ServiceUser {
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            //request.addArgument("description", t.getDescription());
+            request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("NomEntreprise", ((Entreprise) t).getNomEntreprise());
             request.addArgument("TailleEntreprise", ((Entreprise) t).getTailleEntreprise().name());
 
-            //request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
-            // request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
+            request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
+            request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
             request.addArgument("id_domaine", String.valueOf(((Entreprise) t).getId_domaine()));
 
             request.addResponseListener((evt) -> {
@@ -310,9 +277,9 @@ public class ServiceUser {
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             } catch (MailException ex) {
-                
-            } 
-               
+
+            }
+
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
 
@@ -390,6 +357,7 @@ public class ServiceUser {
 
     public boolean login(String login, String password) {
 
+        loginSuccess = false;
         ConnectionRequest request = new ConnectionRequest();
         request.setUrl(URI + "signin");
         request.setHttpMethod("POST");
@@ -417,34 +385,7 @@ public class ServiceUser {
     public boolean loginpasse(String login) {
 
         ConnectionRequest request = new ConnectionRequest();
-        request.setUrl(URI + "verify-login");
-        request.setHttpMethod("POST");
-
-        request.addArgument("mail", login);
-        request.addArgument("numero_telephone", login);
-
-        request.addResponseListener((evt) -> {
-            try {
-                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
-                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
-                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
-                if (!list.isEmpty()) {
-                    loginSuccess = true;
-                }
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-        });
-        NetworkManager.getInstance().addToQueueAndWait(request);
-
-        return loginSuccess;
-    }
-//
-
-    public List<User> SearchCandidat(String login) throws MailException {
-        ConnectionRequest request = new ConnectionRequest();
-
-        request.setUrl(URI + login);
+        request.setUrl(URI + "anis/" + login);
         request.setHttpMethod("GET");
 
         request.addResponseListener((evt) -> {
@@ -452,7 +393,33 @@ public class ServiceUser {
                 InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
                 Map<String, Object> result = new JSONParser().parseJSON(jsonText);
                 List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
-                user.clear();
+
+                if (!list.isEmpty()) {
+                    loginSuccess = true;
+                }
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return loginSuccess;
+    }
+//
+
+    public List<Candidat> SearchCandidat(String login) throws MailException {
+        ConnectionRequest request = new ConnectionRequest();
+
+        request.setUrl(URI + "searchcandidat/" + login);
+        request.setHttpMethod("GET");
+
+        request.addResponseListener((evt) -> {
+            try {
+                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
+                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
+                cd.clear();
 
                 for (Map<String, Object> obj : list) {
                     int id = (int) Float.parseFloat(obj.get("id").toString());
@@ -460,38 +427,32 @@ public class ServiceUser {
                     String prenom = obj.get("prenom").toString();
                     String mail = obj.get("mail").toString();
                     int numero_telephone = (int) Float.parseFloat(obj.get("numero_telephone").toString());
-                    String description = obj.get("description").toString();
+//                  
+                    String motdepasse = obj.get("motdepasse").toString();
 
                     Experience experience = Experience.valueOf(obj.get("experience").toString());
-                    String Github = obj.get("Github").toString();
+
                     Diplome education = Diplome.valueOf(obj.get("education").toString());
 
-                    String role = obj.get("role").toString();
-                    if (role.equals("Candidat")) {
-                        User candidat = new Candidat(id, nom, prenom, mail, numero_telephone, "", description, education, Github, experience);
+                    Candidat candidat = new Candidat(nom, prenom, mail, numero_telephone, motdepasse, "", education, "", experience);
 
-                        user.add(candidat);
-                    }
-
+                    cd.add(candidat);
                 }
-            } catch (MailException ex) {
-                System.out.println(ex.getMessage());
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
+            } catch (MailException ex) {
+
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
 
-        return user;
+        return cd;
     }
-//
-//    
-//
 
     public List<Entreprisedomaine> Searchentreprise(String Nom) throws MailException {
         ConnectionRequest request = new ConnectionRequest();
 
-        request.setUrl(URI + Nom);
+        request.setUrl(URI + "searchentreprise" + Nom);
         request.setHttpMethod("GET");
 
         request.addResponseListener((evt) -> {
@@ -509,6 +470,7 @@ public class ServiceUser {
                     int numero_telephone = (int) Float.parseFloat(obj.get("numero_telephone").toString());
                     String description = obj.get("description").toString();
                     String NomEntreprise = obj.get("NomEntreprise").toString();
+                    String motdepasse = obj.get("motdepasse").toString();
                     String Linkedin = obj.get("Linkedin").toString();
                     String SiteWeb = obj.get("SiteWeb").toString();
                     Taille TailleEntreprise = Taille.valueOf(obj.get("TailleEntreprise").toString());
@@ -516,8 +478,7 @@ public class ServiceUser {
 
                     int id_domaine = (int) Float.parseFloat(obj.get("id_domaine").toString());
 
-                    Entreprisedomaine ent = new Entreprisedomaine(id, nom, prenom, mail, numero_telephone, "", description, NomEntreprise, TailleEntreprise, SiteWeb, Linkedin, id_domaine, nom_domaine);
-
+                    Entreprisedomaine ent = new Entreprisedomaine(id, nom, prenom, mail, numero_telephone, motdepasse, description, NomEntreprise, TailleEntreprise, SiteWeb, Linkedin, id_domaine, nom_domaine);
                     this.entreprise.add(ent);
 
                 }
@@ -525,30 +486,31 @@ public class ServiceUser {
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             } catch (MailException ex) {
-                System.out.println(ex.getMessage());
+
             }
+
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
 
-        return entreprise;
+        return this.entreprise;
 
     }
 
     public String idutilisateur(String login) {
         ConnectionRequest request = new ConnectionRequest();
-        request.setUrl(URI + login);
+        request.setUrl(URI + "anis/" + login);
         request.setHttpMethod("GET");
-
-        final String[] role = new String[1]; // Tableau pour stocker le rôle
 
         request.addResponseListener((evt) -> {
             try {
                 InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
                 Map<String, Object> result = new JSONParser().parseJSON(jsonText);
-                Map<String, Object> list = (Map<String, Object>) result.get("root");
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
 
-                role[0] = list.get("role").toString(); // Met à jour la valeur du rôle
-
+                if (!list.isEmpty()) {
+                    Map<String, Object> obj = list.get(0);
+                    role = obj.get("role").toString();
+                }
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -556,18 +518,7 @@ public class ServiceUser {
 
         NetworkManager.getInstance().addToQueueAndWait(request);
 
-        // Retourne la valeur du rôle
-        if (role[0] != null) {
-            if (role[0].equals("Candidat")) {
-                return "Candidat";
-            } else if (role[0].equals("Entreprise")) {
-                return "Entreprise";
-            } else {
-                return "Admin";
-            }
-        } else {
-            return "not found";
-        }
+        return role;
     }
 
     public boolean modifiermotdepasse(String motdepasse, String login) {
