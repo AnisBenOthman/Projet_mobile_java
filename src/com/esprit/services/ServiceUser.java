@@ -362,9 +362,8 @@ public class ServiceUser {
         request.setUrl(URI + "signin");
         request.setHttpMethod("POST");
 
-        request.addArgument("mail", login);
-        request.addArgument("numero_telephone", login);
-        request.addArgument("motdepasse", password);
+        request.addArgument("login", login);
+        request.addArgument("password", password);
         request.addResponseListener((evt) -> {
             try {
                 InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
