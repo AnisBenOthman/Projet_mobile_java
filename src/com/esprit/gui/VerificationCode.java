@@ -5,6 +5,7 @@
  */
 package com.esprit.gui;
 
+import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Form;
@@ -28,9 +29,9 @@ public class VerificationCode extends Form{
         AddAction(code, mail);
     }
     public void OnGui(){
-        Label lb = new Label("Nous avons envoyé un code de vérification à votre adresse E-mail ");
-        Label lb1 = new Label("Saisisez le code de vérification à 6 chiffres envoyé à votre adresse e-mail");
-        Label lb2 = new Label("Si vous ne recevez pas l'email, vérifiez  dans les courriels indésirables de votre messagerie");
+        SpanLabel lb = new SpanLabel("Nous avons envoyé un code de vérification à votre adresse E-mail ");
+        SpanLabel lb1 = new SpanLabel("Saisisez le code de vérification à 6 chiffres envoyé à votre adresse e-mail");
+        SpanLabel lb2 = new SpanLabel("Si vous ne recevez pas l'email, vérifiez  dans les courriels indésirables de votre messagerie");
         tf = new TextField(null, "code de vérification");
         envoyer = new Button("envoyer");
         addAll(lb,lb1,tf,envoyer,lb2);

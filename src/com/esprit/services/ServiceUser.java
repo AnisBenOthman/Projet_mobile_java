@@ -527,9 +527,10 @@ public class ServiceUser {
         request.setUrl(URI + "reset-pwd");
         request.setHttpMethod("PUT");
 
-        request.addArgument("motdepasse", motdepasse);
-        request.addArgument("numero_telephone", login);
+        request.addArgument("motdepasse", String.valueOf(User.Codepasse(motdepasse)));
         request.addArgument("mail", login);
+        request.addArgument("numero_telephone", login);
+        
 
         request.addResponseListener((evt) -> {
             responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK

@@ -30,8 +30,8 @@ public class Modifiermotdepasse extends Form{
     public void OnGui(){
         Label lb = new Label("Choisissez un mouveau mot de passe");
         Label lb1 = new Label("créer un nouveau mot de passe d'au moins 8 caractéres.");
-        tf = new TextField(null, "Nouveau mot de passe");
-        tf1 = new TextField(null, "Confirmez le nouveau mot de passe"); 
+        tf = new TextField(null, "Nouveau mot de passe",LEFT,TextField.PASSWORD);
+        tf1 = new TextField(null, "Confirmez le nouveau mot de passe",LEFT,TextField.PASSWORD); 
         btn = new Button("envoyer");
         addAll(lb,lb1,tf,tf1,btn);
     }

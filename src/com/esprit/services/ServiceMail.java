@@ -24,7 +24,7 @@ public class ServiceMail {
 
         // Votre adresse e-mail Gmail et mot de passe
         final String myEmail = "findjobreply@gmail.com";
-        final String password = "vwzjqneictcidlgm";
+        final String password = "pjwzsenustgioixb";
 
         // Création de la session avec l'authentification
         Session session = Session.getInstance(properties, new Authenticator() {
