@@ -32,6 +32,8 @@ public class ServiceUser {
     boolean loginSuccess = false;
     int id_domaine;
     String role = "not found";
+    Candidat candidat;
+    Entreprisedomaine entreprisedomaine;
     //private List<Domaine> domaine;
 
     private final String URI = Statics.BASE_URL + "/user/";
@@ -354,6 +356,48 @@ public class ServiceUser {
 
         return cd;
     }
+    
+    public Candidat afficherseulCandidat(String mailo) throws MailException {
+        ConnectionRequest request = new ConnectionRequest();
+
+        request.setUrl(URI + "seulcandidat/" + mailo);
+        request.setHttpMethod("GET");
+
+        request.addResponseListener((evt) -> {
+            try {
+                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
+                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
+                candidat = null;
+                
+
+                for (Map<String, Object> obj : list) {
+                    int id = (int) Float.parseFloat(obj.get("id").toString());
+                    String nom = obj.get("nom").toString();
+                    String prenom = obj.get("prenom").toString();
+                    String mail = obj.get("mail").toString();
+                    int numero_telephone = (int) Float.parseFloat(obj.get("numero_telephone").toString());
+//                  
+                    String motdepasse = obj.get("motdepasse").toString();
+
+                    Experience experience = Experience.valueOf(obj.get("experience").toString());
+
+                    Diplome education = Diplome.valueOf(obj.get("education").toString());
+
+                    candidat = new Candidat(nom, prenom, mail, numero_telephone, motdepasse, "", education, "", experience);
+
+                    
+                }
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            } catch (MailException ex) {
+
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return candidat;
+    }
 
     public boolean login(String login, String password) {
 
@@ -451,7 +495,7 @@ public class ServiceUser {
     public List<Entreprisedomaine> Searchentreprise(String Nom) throws MailException {
         ConnectionRequest request = new ConnectionRequest();
 
-        request.setUrl(URI + "searchentreprise" + Nom);
+        request.setUrl(URI + "searchentreprise/" + Nom);
         request.setHttpMethod("GET");
 
         request.addResponseListener((evt) -> {
@@ -492,6 +536,54 @@ public class ServiceUser {
         NetworkManager.getInstance().addToQueueAndWait(request);
 
         return this.entreprise;
+
+    }
+    
+    public Entreprisedomaine Seulentreprise(String Nom) throws MailException {
+        ConnectionRequest request = new ConnectionRequest();
+
+        request.setUrl(URI + "entreprise/" + Nom);
+        request.setHttpMethod("GET");
+
+        request.addResponseListener((evt) -> {
+            try {
+                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
+                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
+                entreprisedomaine = null;
+                
+
+                for (Map<String, Object> obj : list) {
+                    int id = (int) Float.parseFloat(obj.get("id").toString());
+                    String nom = obj.get("nom").toString();
+                    String prenom = obj.get("prenom").toString();
+                    String mail = obj.get("mail").toString();
+                    int numero_telephone = (int) Float.parseFloat(obj.get("numero_telephone").toString());
+                    String description = obj.get("description").toString();
+                    String NomEntreprise = obj.get("NomEntreprise").toString();
+                    String motdepasse = obj.get("motdepasse").toString();
+                    String Linkedin = obj.get("Linkedin").toString();
+                    String SiteWeb = obj.get("SiteWeb").toString();
+                    Taille TailleEntreprise = Taille.valueOf(obj.get("TailleEntreprise").toString());
+                    String nom_domaine = obj.get("nom_domaine").toString();
+
+                    int id_domaine = (int) Float.parseFloat(obj.get("id_domaine").toString());
+
+                     entreprisedomaine = new Entreprisedomaine(1, nom, prenom, mail, numero_telephone, motdepasse, description, NomEntreprise, TailleEntreprise, SiteWeb, Linkedin, id_domaine, nom_domaine);
+                    
+
+                }
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            } catch (MailException ex) {
+
+            }
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return entreprisedomaine;
 
     }
 

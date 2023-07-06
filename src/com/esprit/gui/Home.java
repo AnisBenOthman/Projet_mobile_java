@@ -38,7 +38,7 @@ public class Home extends Menubar {
         super("login", BoxLayout.y());
         OnGui();
         AddAction();
-        
+
     }
 
     public void OnGui() {
@@ -53,41 +53,52 @@ public class Home extends Menubar {
             System.out.println(ex.getMessage());
         }
         Image img = URLImage.createToStorage(placeHolder, link, link, URLImage.RESIZE_SCALE_TO_FILL).scaled(400, 400);
-        
-        this.addAll(new ImageViewer(img),tflogin, tfmp, btnidentifier, btnmpoublier, btninscription);
+
+        this.addAll(new ImageViewer(img), tflogin, tfmp, btnidentifier, btnmpoublier, btninscription);
     }
 
     public void AddAction() {
+        ServiceUser su = new ServiceUser();
         btnidentifier.addActionListener((l) -> {
-            ServiceUser su = new ServiceUser();
+
             if (tflogin.getText().isEmpty() || tfmp.getText().isEmpty()) {
-            Dialog.show("Alerte", "Veillez remplir tous les champs", "OK", null);
-        }
-            if (su.login(tflogin.getText(), String.valueOf(User.Codepasse(tfmp.getText()))))
-            {
-                if (su.idutilisateur(tflogin.getText()).equals("Candidat")) {
-                    
-                        new Inscription().show();
-                    
-                } else if (su.idutilisateur(tflogin.getText()).equals("Entreprise")) {
-                    new MotdepasseOublier().show();
-                }
+                Dialog.show("Alerte", "Veillez remplir tous les champs", "OK", null);
             }
-            else {
+            if (su.login(tflogin.getText(), String.valueOf(User.Codepasse(tfmp.getText())))) {
+                if (su.idutilisateur(tflogin.getText()).equals("Candidat")) {
+
+                    try {
+                        new AfficherCandidat(su.afficherseulCandidat(tflogin.getText())).show();
+                    } catch (MailException ex) {
+
+                    } catch (IOException ex) {
+
+                    }
+
+                } else if (su.idutilisateur(tflogin.getText()).equals("Entreprise")) {
+                    try {
+                        new AfficherEntreprise(su.Seulentreprise(tflogin.getText())).show();
+                    } catch (MailException ex) {
+                       
+                    } catch (IOException ex) {
+                        
+                    }
+                }
+            } else {
                 Dialog.show("Alerte", "Identifiant ou mot de passe non valide", "OK", null);
             }
 
         });
-        
+
         btnmpoublier.addActionListener((b) -> {
             new MotdepasseOublier().show();
         });
-        
+
         btninscription.addActionListener((a) -> {
             new Inscription().show();
         });
-    }
 
-   
+        
+    }
 
 }
