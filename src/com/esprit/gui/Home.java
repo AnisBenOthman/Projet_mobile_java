@@ -14,6 +14,9 @@ import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
 import com.codename1.ui.URLImage;
 import com.codename1.ui.layouts.BoxLayout;
+import com.esprit.entities.Candidat;
+import com.esprit.entities.Diplome;
+import com.esprit.entities.Experience;
 import com.esprit.entities.MailException;
 import com.esprit.entities.User;
 import com.esprit.services.ServiceUser;
@@ -63,6 +66,7 @@ public class Home extends Menubar {
 
             if (tflogin.getText().isEmpty() || tfmp.getText().isEmpty()) {
                 Dialog.show("Alerte", "Veillez remplir tous les champs", "OK", null);
+                return;
             }
             if (su.login(tflogin.getText(), String.valueOf(User.Codepasse(tfmp.getText())))) {
                 if (su.idutilisateur(tflogin.getText()).equals("Candidat")) {
@@ -96,6 +100,11 @@ public class Home extends Menubar {
 
         btninscription.addActionListener((a) -> {
             new Inscription().show();
+            try {
+                System.out.println(su.modifier(new Candidat(49, "Dali", "mosa", "anis.benothman@esprit.tn", 22564859, "-993941863", "desc", Diplome.Mastére, "git", Experience.Confirme)));
+            } catch (MailException ex) {
+               
+            }
         });
 
         

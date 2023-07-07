@@ -102,17 +102,18 @@ public class ServiceUser {
 
             ConnectionRequest request = new ConnectionRequest();
 
-            request.setUrl(URI + t.getId());
+            request.setUrl(URI + "name/" + t.getId());
             request.setHttpMethod("PUT");
 
             request.addArgument("nom", t.getNom());
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
+           
+            request.addArgument("motdepasse", String.valueOf(User.Codepasse(t.getMotdepasse())));
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            request.addArgument("description", t.getDescription());
-            request.addArgument("role", t.getClass().getSimpleName());
+            
             request.addArgument("education", ((Candidat) t).getEducation().name());
-            request.addArgument("Github", ((Candidat) t).getGithub());
+            
             request.addArgument("experience", ((Candidat) t).getExperience().name());
 
             request.addResponseListener((evt) -> {
@@ -384,7 +385,7 @@ public class ServiceUser {
 
                     Diplome education = Diplome.valueOf(obj.get("education").toString());
 
-                    candidat = new Candidat(nom, prenom, mail, numero_telephone, motdepasse, "", education, "", experience);
+                    candidat = new Candidat(id,nom, prenom, mail, numero_telephone, motdepasse, "", education, "", experience);
 
                     
                 }

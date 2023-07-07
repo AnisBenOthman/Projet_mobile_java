@@ -6,6 +6,7 @@ package com.esprit.gui;
 
 import com.codename1.components.ImageViewer;
 import com.codename1.components.SpanLabel;
+import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
@@ -13,6 +14,7 @@ import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BoxLayout;
 import com.esprit.entities.Candidat;
+import com.esprit.entities.MailException;
 import java.io.IOException;
 import javafx.scene.image.ImageView;
 
@@ -21,16 +23,16 @@ import javafx.scene.image.ImageView;
  * @author Anis
  */
 public class AfficherCandidat extends Menubar {
-
+    private Button modifier;
     public AfficherCandidat(Candidat can) throws IOException {
 
         super("Candidat" + " " + can.getNom(), BoxLayout.y());
         OnGui(can);
-        AddAction();
+        AddAction(can);
     }
 
     public void OnGui(Candidat can) throws IOException {
-
+        modifier = new Button("Modifier");
         ImageViewer image = new ImageViewer(Image.createImage("/utilisateur.png"));
         SpanLabel nom = new SpanLabel("Nom :" + can.getNom());
         SpanLabel prenom = new SpanLabel("Prénom : " + can.getPrenom());
@@ -42,11 +44,19 @@ public class AfficherCandidat extends Menubar {
         c.addAll(nom, prenom, telephone, mail, diplome, experience);
         Container c1 = new Container(BoxLayout.x());
         c1.addAll(image, c);
-        add(c1);
+        addAll(c1,modifier);
 
     }
 
-    public void AddAction() {
+    public void AddAction(Candidat can) {
+        modifier.addActionListener((l) -> {
+            try {
+                new ModifierCandidat(can).show();
+            } catch (MailException ex) {
+                System.out.println(ex.getMessage()); 
+            }
+           
+        });
 
     }
 
