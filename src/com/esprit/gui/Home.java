@@ -100,11 +100,7 @@ public class Home extends Menubar {
 
         btninscription.addActionListener((a) -> {
             new Inscription().show();
-            try {
-                System.out.println(su.modifier(new Candidat(49, "Dali", "mosa", "anis.benothman@esprit.tn", 22564859, "-993941863", "desc", Diplome.Mastére, "git", Experience.Confirme)));
-            } catch (MailException ex) {
-               
-            }
+           
         });
 
         

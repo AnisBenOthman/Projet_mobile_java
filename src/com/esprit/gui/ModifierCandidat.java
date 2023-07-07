@@ -31,7 +31,6 @@ import java.util.List;
 public class ModifierCandidat extends Form {
 
     private Button btn;
-    Candidat candidat;
     private TextField nom;
     private TextField prenom;
     private TextField mail;
@@ -50,12 +49,12 @@ public class ModifierCandidat extends Form {
     }
 
     public void OnGui(Candidat t) throws MailException {
-        nom = new TextField(t.getNom().toString());
-        prenom = new TextField(t.getPrenom().toString());
-        mail = new TextField(t.getMail().toString());
-        telephone = new TextField(t.getNumero_telephone().toString());
-        motdepasse = new TextField(t.getMotdepasse().toString(), "Password", CENTER, TextField.PASSWORD);
-        motdepasse2 = new TextField(t.getMotdepasse().toString(), "Confirmed password", CENTER, TextField.PASSWORD);
+        nom = new TextField(t.getNom().toString(),"Nom");
+        prenom = new TextField(t.getPrenom().toString(),"Prénom");
+        mail = new TextField(t.getMail().toString(),"mail");
+        telephone = new TextField(t.getNumero_telephone().toString(),"mail");
+        motdepasse = new TextField(null,"Password",LEFT,TextField.PASSWORD);
+        motdepasse2 = new TextField(null,"Confirmed Password",LEFT,TextField.PASSWORD);
         diplome = new ComboBox<>();
         diplome.addItem(Diplome.Autre);
         diplome.addItem(Diplome.Bacclauréat);
@@ -114,9 +113,10 @@ public class ModifierCandidat extends Form {
                 return;
             } else {
                 try {
-                    su.modifier(new Candidat(t.getId(), nom.getText().toString(), prenom.getText(), mail.getText(), Integer.parseInt(telephone.getText()), motdepasse.getText(), "description", diplome.getSelectedItem(), "git", experience.getSelectedItem()));
+                    su.modifier(new Candidat(t.getId(), nom.getText(), prenom.getText(), mail.getText(), Integer.parseInt(telephone.getText()), motdepasse.getText(), "description", diplome.getSelectedItem(), "git", experience.getSelectedItem()));
                     if ( su.modifier(new Candidat(t.getId(), nom.getText(), prenom.getText(), mail.getText(), Integer.parseInt(telephone.getText()), motdepasse.getText(), "description", diplome.getSelectedItem(), "git", experience.getSelectedItem()))) {
                         Dialog.show("Alerte", "Modification reussi", "OK", null);
+                        System.out.println(motdepasse.getText());
                     } else {
                         Dialog.show("Alerte", "echec", "OK", null);
                     }
