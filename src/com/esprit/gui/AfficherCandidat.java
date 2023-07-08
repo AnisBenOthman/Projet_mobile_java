@@ -71,9 +71,9 @@ public class AfficherCandidat extends Menubar {
                 try {
                     new Affichertouscandidat().showBack();
                 } catch (IOException ex) {
-                    
+                    System.out.println(ex.getMessage());
                 } catch (MailException ex) {
-                    
+                    System.out.println(ex.getMessage());
                 }
             }
             

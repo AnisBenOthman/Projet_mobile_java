@@ -66,6 +66,7 @@ public class Affichertouscandidat extends Form {
             }
         });
         Label lb = new Label("-----------------------");
+        lb.getAllStyles().setAlignment(Component.CENTER);
         ImageViewer image = new ImageViewer(Image.createImage("/utilisateur.png").scaled(200, 200));
         SpanLabel nom = new SpanLabel("Nom :" + c.getNom());
         SpanLabel prenom = new SpanLabel("Prénom : " + c.getPrenom());

@@ -107,7 +107,7 @@ public class Home extends Menubar {
         afficher.addActionListener((l) -> {
            
             try {
-                new Affichertouscandidat().show();
+                new Affichertoutesentreprise().show();
             } catch (IOException ex) {
                
             } catch (MailException ex) {

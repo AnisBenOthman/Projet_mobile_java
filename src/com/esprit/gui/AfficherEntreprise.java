@@ -12,9 +12,11 @@ import com.codename1.ui.Dialog;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.layouts.BoxLayout;
+import com.esprit.entities.MailException;
 import com.esprit.services.ServiceUser;
 import com.esprit.services.ServiceUser.Entreprisedomaine;
 import java.io.IOException;
+
 
 /**
  *
@@ -59,7 +61,13 @@ public class AfficherEntreprise extends Menubar {
             
                 su.supprimer(e);
                 Dialog.show("Confirmation", "candidat supprimer", "OK", null);
-                new Home().showBack();
+                try {
+                    new Affichertoutesentreprise().showBack();
+                } catch (MailException ex) {
+                    System.out.println(ex.getMessage());
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage()); 
+                }
             }
         });
         
