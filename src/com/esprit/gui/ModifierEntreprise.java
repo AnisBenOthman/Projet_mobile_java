@@ -75,7 +75,7 @@ public class ModifierEntreprise extends Form{
 
                 Boolean entreprisexiste = false;
                 for (ServiceUser.Entreprisedomaine u : list) {
-                    if (u.getMail().equals(mail.getText())) {
+                    if (u.getMail().equals(mail.getText()) && !u.equals(e)) {
                         entreprisexiste = true;
                         break;
                     }

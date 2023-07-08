@@ -47,11 +47,10 @@ public class User {
             return false;
         }
         final User other = (User) obj;
-        if (!Objects.equals(this.mail, other.mail)) {
-            return false;
-        }
-        return Objects.equals(this.numero_telephone, other.numero_telephone);
+        return Objects.equals(this.mail, other.mail);
     }
+
+    
 
    
 

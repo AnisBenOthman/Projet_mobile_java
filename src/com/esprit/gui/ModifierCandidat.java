@@ -85,13 +85,11 @@ public class ModifierCandidat extends Form {
 
             Boolean candidatExiste = false;
             for (Candidat u : list) {
-                if (u.getMail().equals(mail.getText()) || u.getNumero_telephone() == Integer.parseInt(telephone.getText())) {
+                if ((u.getMail().equals(mail.getText()) || u.getNumero_telephone() == Integer.parseInt(telephone.getText())) && !u.equals(t)) {
                     candidatExiste = true;
                     break;
                 }
-                if (t.getMail().equals(mail.getText()) || t.getNumero_telephone() == Integer.parseInt(telephone.getText())) {
-                    candidatExiste = false;
-                }
+                
             }
 
             if (candidatExiste) {
