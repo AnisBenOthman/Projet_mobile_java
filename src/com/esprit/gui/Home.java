@@ -36,6 +36,7 @@ public class Home extends Menubar {
     private TextField tfmp;
     private String link = "http://localhost:8080/mobile/findjob.PNG";
     private EncodedImage placeHolder;
+    private Button afficher;
 
     public Home() {
         super("login", BoxLayout.y());
@@ -56,8 +57,9 @@ public class Home extends Menubar {
             System.out.println(ex.getMessage());
         }
         Image img = URLImage.createToStorage(placeHolder, link, link, URLImage.RESIZE_SCALE_TO_FILL).scaled(400, 400);
+        afficher = new Button("afficher");
 
-        this.addAll(new ImageViewer(img), tflogin, tfmp, btnidentifier, btnmpoublier, btninscription);
+        this.addAll(new ImageViewer(img), tflogin, tfmp, btnidentifier, btnmpoublier, btninscription,afficher);
     }
 
     public void AddAction() {
@@ -101,6 +103,17 @@ public class Home extends Menubar {
         btninscription.addActionListener((a) -> {
             new Inscription().show();
            
+        });
+        afficher.addActionListener((l) -> {
+           
+            try {
+                new Affichertouscandidat().show();
+            } catch (IOException ex) {
+               
+            } catch (MailException ex) {
+               
+            }
+            
         });
 
         

@@ -37,7 +37,7 @@ public class AfficherCandidat extends Menubar {
     public void OnGui(Candidat can) throws IOException {
         modifier = new Button("Modifier");
         supprimer = new Button("Supprimer");
-        ImageViewer image = new ImageViewer(Image.createImage("/utilisateur.png"));
+        ImageViewer image = new ImageViewer(Image.createImage("/utilisateur.png").scaled(200, 200));
         SpanLabel nom = new SpanLabel("Nom :" + can.getNom());
         SpanLabel prenom = new SpanLabel("Prénom : " + can.getPrenom());
         SpanLabel telephone = new SpanLabel("Téléphone : " + String.valueOf(can.getNumero_telephone()));
@@ -68,7 +68,13 @@ public class AfficherCandidat extends Menubar {
             if(Dialog.show("Confirmation", "Êtes-vous sûr de vouloir supprimer ce candidat ?", "OK", "Annuler")){
              su.supprimer(can);
              Dialog.show("Confirmation", "candidat supprimer", "OK",null);
-             new Home().showBack();
+                try {
+                    new Affichertouscandidat().showBack();
+                } catch (IOException ex) {
+                    
+                } catch (MailException ex) {
+                    
+                }
             }
             
         });
