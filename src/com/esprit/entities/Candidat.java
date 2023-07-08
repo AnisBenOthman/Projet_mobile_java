@@ -12,8 +12,9 @@ import java.util.List;
  * @author Anis
  */
 public class Candidat extends User {
+
     private Diplome education;
-    private List<Integer> ListeCompetences; 
+    private List<Integer> ListeCompetences;
     private String Github;
     private Experience experience;
 
@@ -26,17 +27,13 @@ public class Candidat extends User {
         this.education = education;
         this.experience = experience;
     }
-    
-    
-    
-    
 
     public Candidat(int id, String nom, String prenom, String mail, Integer numero_telephone, String motdepasse, String description, Diplome education, String Github, Experience experience) throws MailException {
         super(id, nom, prenom, mail, numero_telephone, motdepasse, description);
         this.education = education;
         this.ListeCompetences = new ArrayList<>();
-        this.Github= Github;
-        this.experience=experience;
+        this.Github = Github;
+        this.experience = experience;
         if (!emailvalidator(mail)) {
             throw new MailException("Mail non valide");
         }
@@ -49,12 +46,12 @@ public class Candidat extends User {
         }
     }
 
-    public Candidat( String nom, String prenom, String mail, Integer numero_telephone, String motdepasse, String description,Diplome education, String Github, Experience experience) throws MailException {
+    public Candidat(String nom, String prenom, String mail, Integer numero_telephone, String motdepasse, String description, Diplome education, String Github, Experience experience) throws MailException {
         super(nom, prenom, mail, numero_telephone, motdepasse, description);
         this.education = education;
         this.ListeCompetences = new ArrayList<>();
-        this.Github= Github;
-        this.experience=experience;
+        this.Github = Github;
+        this.experience = experience;
         if (!emailvalidator(mail)) {
             throw new MailException("mail up");
         }
@@ -74,11 +71,6 @@ public class Candidat extends User {
     public void setListeCompetences(List<Integer> ListeCompetences) {
         this.ListeCompetences = ListeCompetences;
     }
-    
-
-    
-
-    
 
     public Diplome getEducation() {
         return education;
@@ -92,8 +84,6 @@ public class Candidat extends User {
     public String toString() {
         return "Candidat{" + super.toString() + "education=" + education + ", Github=" + Github + ", experience=" + experience + '}';
     }
-
-   
 
     public String getGithub() {
         return Github;
@@ -110,16 +100,5 @@ public class Candidat extends User {
     public void setExperience(Experience experience) {
         this.experience = experience;
     }
-    
 
-    
-
-    
-
-    
-
-   
-   
-    
-    
 }

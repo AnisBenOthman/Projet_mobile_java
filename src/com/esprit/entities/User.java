@@ -30,6 +30,12 @@ public class User {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -41,8 +47,13 @@ public class User {
             return false;
         }
         final User other = (User) obj;
-        return true;
+        if (!Objects.equals(this.mail, other.mail)) {
+            return false;
+        }
+        return Objects.equals(this.numero_telephone, other.numero_telephone);
     }
+
+   
 
     public User() {
     }

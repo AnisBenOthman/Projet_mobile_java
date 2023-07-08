@@ -56,7 +56,7 @@ public class ServiceUser {
             request.addArgument("nom", t.getNom());
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
-            request.addArgument("motdepasse", String.valueOf(User.Codepasse(t.getMotdepasse())));
+            request.addArgument("motdepasse", t.getMotdepasse());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
             request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
@@ -77,7 +77,7 @@ public class ServiceUser {
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            request.addArgument("motdepasse", String.valueOf(User.Codepasse(t.getMotdepasse())));
+            request.addArgument("motdepasse", t.getMotdepasse());
             request.addArgument("description", t.getDescription());
             request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("NomEntreprise", ((Entreprise) t).getNomEntreprise());
@@ -102,18 +102,18 @@ public class ServiceUser {
 
             ConnectionRequest request = new ConnectionRequest();
 
-            request.setUrl(URI + "name/" + t.getId());
+            request.setUrl(URI + "modifiercandidat/" + t.getId());
             request.setHttpMethod("PUT");
 
             request.addArgument("nom", t.getNom());
             request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
-           
-            request.addArgument("motdepasse", String.valueOf(User.Codepasse(t.getMotdepasse())));
+
+            request.addArgument("motdepasse", t.getMotdepasse());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            
+
             request.addArgument("education", ((Candidat) t).getEducation().name());
-            
+
             request.addArgument("experience", ((Candidat) t).getExperience().name());
 
             request.addResponseListener((evt) -> {
@@ -127,20 +127,21 @@ public class ServiceUser {
 
             ConnectionRequest request = new ConnectionRequest();
 
-            request.setUrl(URI + t.getId());
+            request.setUrl(URI + "modifierentreprise/" + t.getId());
             request.setHttpMethod("PUT");
 
-            request.addArgument("nom", t.getNom());
-            request.addArgument("prenom", t.getPrenom());
+//            request.addArgument("nom", t.getNom());
+//            request.addArgument("prenom", t.getPrenom());
             request.addArgument("mail", t.getMail());
+            request.addArgument("motdepasse", t.getMotdepasse());
             request.addArgument("numero_telephone", String.valueOf(t.getNumero_telephone()));
-            request.addArgument("description", t.getDescription());
-            request.addArgument("role", t.getClass().getSimpleName());
+//            request.addArgument("description", t.getDescription());
+//            request.addArgument("role", t.getClass().getSimpleName());
             request.addArgument("NomEntreprise", ((Entreprise) t).getNomEntreprise());
             request.addArgument("TailleEntreprise", ((Entreprise) t).getTailleEntreprise().name());
 
-            request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
-            request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
+//            request.addArgument("SiteWeb", ((Entreprise) t).getSiteWeb());
+//            request.addArgument("Linkedin", ((Entreprise) t).getLinkedin());
             request.addArgument("id_domaine", String.valueOf(((Entreprise) t).getId_domaine()));
 
             request.addResponseListener((evt) -> {
@@ -357,7 +358,7 @@ public class ServiceUser {
 
         return cd;
     }
-    
+
     public Candidat afficherseulCandidat(String mailo) throws MailException {
         ConnectionRequest request = new ConnectionRequest();
 
@@ -370,7 +371,6 @@ public class ServiceUser {
                 Map<String, Object> result = new JSONParser().parseJSON(jsonText);
                 List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
                 candidat = null;
-                
 
                 for (Map<String, Object> obj : list) {
                     int id = (int) Float.parseFloat(obj.get("id").toString());
@@ -385,9 +385,8 @@ public class ServiceUser {
 
                     Diplome education = Diplome.valueOf(obj.get("education").toString());
 
-                    candidat = new Candidat(id,nom, prenom, mail, numero_telephone, motdepasse, "", education, "", experience);
+                    candidat = new Candidat(id, nom, prenom, mail, numero_telephone, motdepasse, "", education, "", experience);
 
-                    
                 }
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
@@ -539,7 +538,7 @@ public class ServiceUser {
         return this.entreprise;
 
     }
-    
+
     public Entreprisedomaine Seulentreprise(String Nom) throws MailException {
         ConnectionRequest request = new ConnectionRequest();
 
@@ -552,7 +551,6 @@ public class ServiceUser {
                 Map<String, Object> result = new JSONParser().parseJSON(jsonText);
                 List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
                 entreprisedomaine = null;
-                
 
                 for (Map<String, Object> obj : list) {
                     int id = (int) Float.parseFloat(obj.get("id").toString());
@@ -570,8 +568,7 @@ public class ServiceUser {
 
                     int id_domaine = (int) Float.parseFloat(obj.get("id_domaine").toString());
 
-                     entreprisedomaine = new Entreprisedomaine(1, nom, prenom, mail, numero_telephone, motdepasse, description, NomEntreprise, TailleEntreprise, SiteWeb, Linkedin, id_domaine, nom_domaine);
-                    
+                    entreprisedomaine = new Entreprisedomaine(id, nom, prenom, mail, numero_telephone, motdepasse, description, NomEntreprise, TailleEntreprise, SiteWeb, Linkedin, id_domaine, nom_domaine);
 
                 }
 
@@ -623,7 +620,6 @@ public class ServiceUser {
         request.addArgument("motdepasse", String.valueOf(User.Codepasse(motdepasse)));
         request.addArgument("mail", login);
         request.addArgument("numero_telephone", login);
-        
 
         request.addResponseListener((evt) -> {
             responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK

@@ -64,7 +64,7 @@ public class AfficherCandidat extends Menubar {
         });
         
         supprimer.addActionListener((l) -> {
-            Dialog.show("Confirmation", "Êtes-vous sûr de vouloir supprimer ce candidat ?", "OK", "Annuler");
+            
             if(Dialog.show("Confirmation", "Êtes-vous sûr de vouloir supprimer ce candidat ?", "OK", "Annuler")){
              su.supprimer(can);
              Dialog.show("Confirmation", "candidat supprimer", "OK",null);
