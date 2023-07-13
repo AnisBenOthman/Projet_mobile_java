@@ -108,10 +108,11 @@ public class Home extends Menubar {
            
             try {
                 new Affichertoutesentreprise().show();
+                
             } catch (IOException ex) {
-               
+                System.out.println(ex.getMessage());
             } catch (MailException ex) {
-               
+                System.out.println(ex.getMessage());  
             }
             
         });

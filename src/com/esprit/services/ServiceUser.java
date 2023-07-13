@@ -536,7 +536,6 @@ public class ServiceUser {
         NetworkManager.getInstance().addToQueueAndWait(request);
 
         return this.entreprise;
-
     }
 
     public Entreprisedomaine Seulentreprise(String Nom) throws MailException {
