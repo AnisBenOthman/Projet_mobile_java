@@ -58,6 +58,8 @@ public class Home extends Menubar {
         }
         Image img = URLImage.createToStorage(placeHolder, link, link, URLImage.RESIZE_SCALE_TO_FILL).scaled(400, 400);
         afficher = new Button("afficher");
+       
+        
 
         this.addAll(new ImageViewer(img), tflogin, tfmp, btnidentifier, btnmpoublier, btninscription,afficher);
     }
@@ -107,7 +109,7 @@ public class Home extends Menubar {
         afficher.addActionListener((l) -> {
            
             try {
-                new Affichertoutesentreprise().show();
+                new Affichertouscandidat().show();
                 
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());

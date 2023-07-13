@@ -24,6 +24,7 @@ import com.esprit.services.ServiceUser.Entreprisedomaine;
 import java.io.IOException;
 import java.util.List;
 
+
 /**
  *
  * @author Anis
@@ -78,6 +79,17 @@ public class Affichertoutesentreprise extends Menubar {
 
                 } catch (MailException ex) {
                     System.out.println(ex.getMessage());
+                }
+            }
+            else {
+                try {
+                    this.removeAll();
+                    OnGui();
+                    this.revalidate();
+                } catch (MailException ex) {
+                    
+                } catch (IOException ex) {
+                    
                 }
             }
         });

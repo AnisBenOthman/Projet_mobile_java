@@ -1,6 +1,7 @@
 package com.esprit.myapp;
 
 
+
 import static com.codename1.ui.CN.*;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
@@ -25,11 +26,17 @@ public class MyApplication {
     private Form current;
     private Resources theme;
 
-    public void init(Object context) {
+    public void init(Object context){
         // use two network threads instead of one
-        updateNetworkThreadCount(2);
-
-        theme = UIManager.initFirstTheme("/theme");
+//        updateNetworkThreadCount(2);
+        try{
+        //theme = UIManager.initFirstTheme("/theme");
+        theme = Resources.openLayered("/theme");
+        UIManager.getInstance().setThemeProps(theme.getTheme("Anis"));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    
 
         // Enable Toolbar on all Forms by default
         Toolbar.setGlobalToolbar(true);

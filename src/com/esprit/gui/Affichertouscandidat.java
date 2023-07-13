@@ -12,7 +12,10 @@ import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
+import com.codename1.ui.TextField;
+import com.codename1.ui.Toolbar;
 import com.codename1.ui.geom.Dimension;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.list.ContainerList;
 import com.codename1.ui.list.DefaultListModel;
@@ -36,12 +39,72 @@ import java.util.List;
 //
 
 
-public class Affichertouscandidat extends Form {
-
+public class Affichertouscandidat extends Menubar {
+    ServiceUser su = new ServiceUser();
+    Container ct = new Container(BoxLayout.x());
+    TextField tf = new TextField(null, "Rechercher");
+    Button bt = new Button("OK");
+    Toolbar tb;
+    List<Candidat> ls;
     public Affichertouscandidat() throws IOException, MailException {
         super("Liste des Candidats", BoxLayout.y());
+        ct = new Container(new BorderLayout()); 
+        tf = new TextField(null, "Rechercher"); 
+        bt = new Button("OK");
+        
+        ct.addComponent(BorderLayout.CENTER, tf);
+        ct.addComponent(BorderLayout.EAST, bt);
+        tb = new Toolbar();
+        setToolBar(tb);
+        tb.setTitleComponent(ct);
 
-        ServiceUser su = new ServiceUser();
+        addActions();
+        
+        OnGui();
+        bt.addActionListener((l) -> {
+            if (!tf.getText().isEmpty()) {
+                
+
+                try {
+                    ls = su.SearchCandidat(tf.getText());
+                    this.removeAll();
+                    
+
+                    for (Candidat c : ls) {
+                        try {
+                            this.add(createContenaire(c));
+                              
+                        } catch (IOException ex) {
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    
+                    
+                     this.revalidate();
+                  
+                    
+
+                } catch (MailException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+            else {
+                try {
+                    this.removeAll();
+                    OnGui();
+                    this.revalidate();
+                } catch (MailException ex) {
+                    
+                } catch (IOException ex) {
+                    
+                }
+            }
+        });
+    
+        
+    }
+    
+    public void OnGui() throws MailException, IOException{
         List<Candidat> lc = su.afficherCandidat();
         for (Candidat c : lc) {
             add(createContenaire(c));
