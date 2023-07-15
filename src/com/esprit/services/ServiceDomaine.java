@@ -1,154 +1,128 @@
-///*
-// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
-// */
-//package com.esprit.services;
-//
-//import com.esprit.entities.*;
-//import com.esprit.utils.DataSource;
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-///**
-// *
-// * @author Anis
-// */
-//public class ServiceDomaine {
-//    
-//    private Connection cnx = DataSource.GetInstance().getCnx();
-//    
-//    public void ajouter(Domaine d) {
-//        try {
-//            String req ="INSERT INTO domaine (nom_domaine) VALUES(?)";
-//            
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setString(1,d.getNom_domaine());
-//            pst.executeUpdate();
-//            System.out.println("ajouter avec Succes !");
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
-//
-//    
-//    public void modifier(Domaine d) {
-//        try {
-//            String req ="UPDATE domaine SET nom_domaine = ? WHERE id_domaine = ?";
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setString(1, d.getNom_domaine());
-//            pst.setInt(2, d.getId_domaine());
-//            pst.executeUpdate();
-//            System.out.println("modifier avec succes !");
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
-//
-//    
-//    public void supprimer(Domaine p) {
-//        try {
-//            String req = "DELETE FROM domaine WHERE id_domaine = ?";
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setInt(1, p.getId_domaine());
-//            pst.executeUpdate();
-//            System.out.println("supprimer avec succes ! ");
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
-//
-//    
-//    public List<Domaine> afficher() {
-//        List<Domaine> list = new ArrayList<>();
-//        String req = "SELECT * FROM domaine ";
-//        try {
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            ResultSet res = pst.executeQuery();
-//            
-//            while(res.next()){
-//                list.add(new Domaine(res.getInt("id_domaine"), res.getString("nom_domaine")));
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//        return list;
-//        
-//        
-//    }
-//    /**********************************************************/
-//
-//    public List<String> getDomainesName() {
-//        List<String> list = new ArrayList<>();
-//        String req = "SELECT nom_domaine FROM domaine ";
-//        try {
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            ResultSet res = pst.executeQuery();
-//            
-//            while(res.next()){
-//                list.add(res.getString("nom_domaine"));
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//        return list;
-//        
-//        
-//    }
-//    public int getIdDomaineByName(String name){
-//        String req = "SELECT id_domaine FROM domaine WHERE nom_domaine = ? ";
-//        int id = 0;
-//        try {
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setString(1,name);
-//            ResultSet res = pst.executeQuery();
-//            while(res.next()){
-//                id = res.getInt("id_domaine");
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//        return id ;
-//    };
-//    
-//    public String getNameDomaineById(int id){
-//        String req = "SELECT nom_domaine FROM domaine WHERE  id_domaine= ? ";
-//        String  name = null ;
-//        try {
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setInt(1,id);
-//            ResultSet res = pst.executeQuery();
-//            while(res.next()){
-//                name = res.getString("nom_domaine");
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//        return name ;
-//    };
-//    
-//    
-//    public boolean chercherNomDomaine(String nom){
-//        String req = "SELECT * FROM domaine WHERE  lower(nom_domaine)= lower(?) ";
-//        Domaine d = null;
-//        try {
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setString(1,nom);
-//            ResultSet res = pst.executeQuery();
-//            while(res.next()){
-//                d = new Domaine(res.getInt("id_domaine"), res.getString("nom_domaine"));
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//        if(d==null){
-//            return false;
-//        }else{
-//            return true;
-//        }
-//        
-//    };
-//}
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.esprit.services;
+
+
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.JSONParser;
+import com.codename1.io.NetworkManager;
+import com.esprit.entities.Domaine;
+import com.esprit.utils.Statics;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ *
+ * @author ASUS
+ */
+public class ServiceDomaine {
+    private boolean responseResult;
+    private List<String> NomDomaines;
+    private final String URI = Statics.BASE_URL + "/domaine/";
+    Domaine d = null ;
+    
+    public ServiceDomaine() {
+        NomDomaines = new ArrayList();
+    }
+    
+    public List<String> afficherNomDomaine() {
+        ConnectionRequest request = new ConnectionRequest();
+        
+        request.setUrl(URI);
+        request.setHttpMethod("GET");
+
+        request.addResponseListener((evt) -> {
+            try {
+                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
+                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
+
+                for (Map<String, Object> obj : list) {
+                    
+                    String nomd = obj.get("nom_domaine").toString();
+                    NomDomaines.add(nomd);
+                  
+                }
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return NomDomaines;
+    }
+    
+    
+    
+    public Domaine getDomaineByNom(String nom) {
+        ConnectionRequest request = new ConnectionRequest();
+        request.setUrl(URI);
+        request.setHttpMethod("GET");
+        
+        request.addResponseListener((evt) -> {
+            try {
+                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
+                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
+
+                for (Map<String, Object> obj : list) {
+                    int id = (int) Float.parseFloat(obj.get("id_domaine").toString());
+                    String nomd = obj.get("nom_domaine").toString();
+                    if (nomd.equals(nom)) { 
+                        // Check if the nom_domaine matches the requested nom
+                        d = new Domaine(id, nomd);
+                        break;
+                    }
+                }
+                
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return  d;
+    }
+    
+    
+    
+    public Domaine getDomaineById(int id) {
+        ConnectionRequest request = new ConnectionRequest();
+        request.setUrl(URI);
+        request.setHttpMethod("GET");
+        
+        request.addResponseListener((evt) -> {
+            try {
+                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
+                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
+
+                for (Map<String, Object> obj : list) {
+                    int idd = (int) Float.parseFloat(obj.get("id_domaine").toString());
+                    String nomd = obj.get("nom_domaine").toString();
+                    if (id == idd) { 
+                        // Check if the nom_domaine matches the requested nom
+                        d = new Domaine(idd, nomd);
+                        break;
+                    }
+                }
+                
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return  d;
+    }
+    
+}

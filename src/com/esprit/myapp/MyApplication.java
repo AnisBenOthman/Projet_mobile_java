@@ -28,14 +28,14 @@ public class MyApplication {
 
     public void init(Object context){
         // use two network threads instead of one
-//        updateNetworkThreadCount(2);
-        try{
-        //theme = UIManager.initFirstTheme("/theme");
-        theme = Resources.openLayered("/theme");
-        UIManager.getInstance().setThemeProps(theme.getTheme("Anis"));
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        updateNetworkThreadCount(2);
+//        try{
+        theme = UIManager.initFirstTheme("/theme");
+        //theme = Resources.openLayered("/theme");
+        //UIManager.getInstance().setThemeProps(theme.getTheme("Anis"));
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
     
 
         // Enable Toolbar on all Forms by default

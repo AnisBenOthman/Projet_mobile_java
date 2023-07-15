@@ -1,105 +1,122 @@
-///*
-// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
-// */
-//package com.esprit.services;
-//
-//import com.esprit.entities.*;
-//
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-///**
-// *
-// * @author Anis
-// */
-//public class ServiceCompetence {
-//    
-//    public void ajouter(Competence competence) {
-//        try {
-//            String req = "INSERT INTO competences(id_c, nom, description) VALUES (?, ?, ?);";
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setInt(1, competence.getId_c());
-//            pst.setString(2, competence.getNom());
-//            pst.setString(3, competence.getDescription());
-//            
-//            pst.executeUpdate();
-//            System.out.println("Compétence ajoutée !");
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
-//
-//    public void modifier(Competence competence) {
-//        try {
-//            String req = "UPDATE competences SET nom=?, description=? WHERE id_c=?";
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setString(1, competence.getNom());
-//            pst.setString(2, competence.getDescription());
-//           
-//            pst.setInt(3, competence.getId_c());
-//            pst.executeUpdate();
-//            System.out.println("Compétence modifiée !");
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
-//
-//    public void supprimer(Competence competence) {
-//        try {
-//            String req = "DELETE FROM competences WHERE id_c=?";
-//            PreparedStatement pst = cnx.prepareStatement(req);
-//            pst.setInt(1, competence.getId_c());
-//            pst.executeUpdate();
-//            System.out.println("Compétence supprimée !");
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
-//
-//    public List<Competence> afficher() {
-//    List<Competence> list = new ArrayList<>();
-//
-//    String req = "SELECT id_c, nom, description FROM competences";
-//    try {
-//        PreparedStatement pst = cnx.prepareStatement(req);
-//        ResultSet rs = pst.executeQuery();
-//        while (rs.next()) {
-//            int id_c = rs.getInt("id_c");
-//            String nom = rs.getString("nom");
-//            String description = rs.getString("description");
-//            Competence competence = new Competence(id_c, nom, description);
-//            list.add(competence);
-//        }
-//    } catch (SQLException ex) {
-//        System.out.println(ex.getMessage());
-//    }
-//
-//    return list;
-//}
-//    public List<String> affichercompetencebynom() {
-//    List<String> list = new ArrayList<>();
-//
-//    String req = "SELECT nom FROM competences";
-//    try {
-//        PreparedStatement pst = cnx.prepareStatement(req);
-//        ResultSet rs = pst.executeQuery();
-//        while (rs.next()) {
-//            
-//            String nom = rs.getString("nom");
-//            
-//           
-//            list.add(nom);
-//        }
-//    } catch (SQLException ex) {
-//        System.out.println(ex.getMessage());
-//    }
-//
-//    return list;
-//}
-//
-//}
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.esprit.services;
+
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.JSONParser;
+import com.codename1.io.NetworkManager;
+import com.esprit.entities.Competence;
+import com.esprit.utils.Statics;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+/**
+ *
+ * @author abdel
+ */
+public class ServiceCompetence implements IService<Competence> {
+
+    private boolean responseResult;
+    private final List<Competence> competences;
+    
+    private final String URI = Statics.BASE_URL + "/user/";
+
+    public ServiceCompetence() {
+        competences = new ArrayList();
+    }
+
+    @Override
+    public boolean ajouter(Competence c) {
+        ConnectionRequest request = new ConnectionRequest();
+        
+        request.setUrl(URI + "/insertcompetence");
+        request.setHttpMethod("POST");
+
+        request.addArgument("nom", c.getNom());
+        request.addArgument("description", c.getDescription());
+      
+
+        request.addResponseListener((evt) -> {
+            responseResult = request.getResponseCode() == 201; // Code HTTP 201 OK
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return responseResult;
+    }
+
+    public boolean modifier(Competence c) {
+        ConnectionRequest request = new ConnectionRequest();
+        
+        request.setUrl(URI + "updatecompetence/" + c.getId_c());
+        request.setHttpMethod("PUT");
+
+        request.addArgument("nom", c.getNom());
+        request.addArgument("description", c.getDescription());
+
+        request.addResponseListener((evt) -> {
+            responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return responseResult;
+    }
+
+    public boolean supprimer(Competence c) {
+        ConnectionRequest request = new ConnectionRequest();
+        
+        request.setUrl(URI + "deletecompetence/" + c.getId_c());
+        request.setHttpMethod("DELETE");
+
+        request.addResponseListener((evt) -> {
+            responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return responseResult;
+    }
+
+    public List<Competence> afficher() {
+        ConnectionRequest request = new ConnectionRequest();
+        
+        request.setUrl(URI + "selectcompetence");
+        request.setHttpMethod("GET");
+
+        request.addResponseListener((evt) -> {
+            try {
+                InputStreamReader jsonText = new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8");
+                Map<String, Object> result = new JSONParser().parseJSON(jsonText);
+                List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("root");
+
+                for (Map<String, Object> obj : list) {
+                    int id_c = (int) Float.parseFloat(obj.get("id_c").toString());
+                    String nom = obj.get("nom").toString();
+                    String description = obj.get("description").toString();
+                    competences.add(new Competence(id_c, nom, description));
+                }
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return competences;
+    }
+    
+    
+    public int GetIdCompetenceByNom (String nom){
+                List<Competence> allCompetences = afficher(); 
+    int id= 0;
+        for (Competence Competence : allCompetences) {
+        if (Competence.getNom().equals(nom)) {
+            id = Competence.getId_c();
+            break;
+        }
+    }
+        return id;
+    }
+}

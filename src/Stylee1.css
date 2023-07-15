@@ -1,0 +1,217 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 27 mai 2023, 11:21:06
+    Author     : Anis
+*/
+
+#bady{
+    -fx-background-color: #2F2B43;
+}
+#back{
+    background-color: #FA2C56
+}
+#button1
+{
+-fx-background-color : #393351;
+-fx-background-radius :  30 0 0 30;
+}
+#button1:hover
+{
+-fx-background-color : #524A7B ;
+-fx-background-radius :  30 0 0 30;
+}
+#button1:pressed
+{
+-fx-background-color : #2F2B43 ;
+-fx-background-radius :  30 0 0 30;
+}
+
+#button2
+{
+-fx-background-color :  #0077B5;
+-fx-background-radius :  20;
+}
+#button2:hover
+{
+-fx-background-color : #524A7B ;
+-fx-background-radius :  20;
+}
+#button2:pressed
+{
+-fx-background-color : #2F2B43 ;
+-fx-background-radius :  20;
+}
+
+#button3
+{
+    -fx-background-color : #141124;
+    -fx-background-radius :  0 0 0 0;
+}
+#button3:hover
+{
+    -fx-background-color : #524A7B ;
+}
+#button3:pressed
+{
+    -fx-background-color : #2F2B43 ;
+}
+
+.button4
+{
+    -fx-background-color :linear-gradient(to top left, #41951C, #D4CEE3);
+    -fx-background-radius :  30 30 30 30;
+}
+#button4:hover
+{
+    -fx-background-color :linear-gradient(to top left, #D4CEE3, #41951C);
+    -fx-background-radius :  30 30 30 30;
+}
+#button4:pressed
+{
+    -fx-background-color :linear-gradient(to top left, #41951C, #D4CEE3);
+    -fx-background-radius :  30 30 30 30;
+}
+
+
+#combo-box
+{
+    -fx-background-color : #141124;
+    -fx-border-color:  #141124;
+    -fx-border-radius: 30;
+    -fx-text-fill: white;
+    
+   -fx-font-weight: bold;
+   -fx-alignment: CENTER_LEFT;
+}
+#combo-box:hover
+{
+    -fx-background-color : #141124;
+    -fx-border-radius: 30;
+}
+#combo-box:pressed
+{
+    -fx-background-color : #141124;
+    -fx-border-radius: 30;
+}
+
+#table-view .column-header,
+#table-view .column-header-background .filler {
+    -fx-cell-size : 20;
+    -fx-background-color:    #FA2C56;
+}
+#table-view .column-header .label{
+
+   -fx-text-fill: white;
+   -fx-font-weight: bold;
+   -fx-alignment: CENTER_LEFT;
+}
+#table-view .cell{
+   -fx-cell-size: 30;
+  -fx-alignment: center-left;
+  -fx-text-fill: #000000;
+}
+
+#table-row-cell:selected {
+    -fx-background-color:   #FA2C56;
+ }
+ .table-row-cell:selected .text {
+        -fx-fill : white ;
+
+ }
+/* scroll bar starts here */
+
+/* The increment and decrement button CSS class of scrollbar */
+#table-view .increment-button ,.table-view .decrement-button {
+    -fx-background-color:transparent;
+	-fx-background-radius: 2em;
+
+}
+
+/* The main scrollbar **track** CSS class  */
+#table-view .scroll-bar:horizontal .track,
+#table-view .scroll-bar:vertical .track{
+	-fx-background-color: transparent;
+	-fx-border-color:derive(  #2D75E8,80%);
+	-fx-background-radius: 2em;
+	-fx-border-radius:2em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.table-view .scroll-bar:horizontal .thumb,
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color:derive( #2D75E8,90%);
+	-fx-background-insets: 2, 0, 0;
+	-fx-background-radius: 2em;
+
+}
+
+/* chart properties */
+
+#chart {
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
+    -fx-legend-visible: false;
+}
+#chart-plot-background {
+    -fx-background-color:transparent;
+}
+
+#chart-pie {
+    -fx-border-color: derive(-fx-pie-color, 1%);
+    -fx-border-width: 0px;
+}
+#linear-grad
+{
+    -fx-background-color: linear-gradient(to bottom left, #A868A0, #2D75E8);
+}
+
+#buttonanis {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #0077B5;
+  color: #FFFFFF;
+  border-radius: 4px;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+#buttonanis:hover {
+  background-color: #005F8E;
+  cursor: pointer;
+}
+
+#buttonanis:focus {
+  outline: none;
+}
+#button-retour {
+  background-color: #0077B5; /* Couleur de fond du bouton */
+  color: #FFFFFF; /* Couleur du texte */
+  padding: 10px 20px; /* Espacement interne du bouton */
+  border: none; /* Suppression de la bordure */
+  border-radius: 4px; /* Arrondi des coins */
+  font-size: 14px; /* Taille de la police */
+  text-decoration: none; /* Suppression de la décoration du texte */
+}
+
+#button-retour:hover {
+  background-color: #005FAB; /* Couleur de fond du bouton au survol */
+  cursor: pointer; /* Curseur au survol */
+}
+
+#button-retour:focus {
+  outline: none; /* Suppression de la mise en évidence au focus */
+}
+#eye-icon {
+    -fx-fill: #0077b5; /* Couleur de l'icône de l'œil lorsqu'il est visible */
+}
+
+#eye-slash-icon {
+    -fx-fill: #0077b5; /* Couleur de l'icône de l'œil lorsqu'il est masqué */
+}

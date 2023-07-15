@@ -9,6 +9,9 @@ import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.Layout;
+import com.esprit.entities.MailException;
+import java.io.IOException;
+
 
 /**
  *
@@ -25,6 +28,47 @@ public class Menubar extends Form {
         getToolbar().addMaterialCommandToSideMenu("Home", FontImage.MATERIAL_HOME, e -> {
             new Home().show();
         });
+        getToolbar().addMaterialCommandToSideMenu("Quiz", FontImage.MATERIAL_QUIZ, e -> {
+            new HomeForm().show();
+        });
+        
+        getToolbar().addMaterialCommandToSideMenu("Document", FontImage.MATERIAL_DOCUMENT_SCANNER, e -> {
+            new DocumentHome().show();
+        });
+        
+        getToolbar().addMaterialCommandToSideMenu("Offre", FontImage.MATERIAL_BOOKMARK, e -> {
+            new Offrehome().show();
+        });
+        
+         getToolbar().addMaterialCommandToSideMenu("Review", FontImage.MATERIAL_CABLE, e -> {
+            new Reviewhome().show();
+        });
+         
+         getToolbar().addMaterialCommandToSideMenu("Forum", FontImage.MATERIAL_FORUM, e -> {
+            new AfficherForumsForm().show();
+        });
+         
+          getToolbar().addMaterialCommandToSideMenu("Candidat", FontImage.MATERIAL_PAGES, e -> {
+            try {
+                new Affichertouscandidat().show();
+            } catch (IOException ex) {
+                
+            } catch (MailException ex) {
+               
+            }
+        });
+          
+          getToolbar().addMaterialCommandToSideMenu("Entreprise", FontImage.MATERIAL_ANCHOR, e -> {
+            try {
+                new Affichertoutesentreprise().show();
+            } catch (IOException ex) {
+                
+            } catch (MailException ex) {
+               
+            }
+        });
+          
+          
 
     }
 
